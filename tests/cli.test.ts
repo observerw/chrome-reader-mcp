@@ -11,12 +11,6 @@ import {parseArguments} from '../src/cli.js';
 
 describe('cli args parsing', () => {
   const defaultArgs = {
-    'category-emulation': true,
-    categoryEmulation: true,
-    'category-performance': true,
-    categoryPerformance: true,
-    'category-network': true,
-    categoryNetwork: true,
     'auto-connect': undefined,
     autoConnect: undefined,
   };
@@ -194,22 +188,6 @@ describe('cli args parsing', () => {
     });
   });
 
-  it('parses disabled category', async () => {
-    const args = parseArguments('1.0.0', [
-      'node',
-      'main.js',
-      '--no-category-emulation',
-    ]);
-    assert.deepStrictEqual(args, {
-      ...defaultArgs,
-      _: [],
-      headless: false,
-      $0: 'npx chrome-devtools-mcp@latest',
-      channel: 'stable',
-      'category-emulation': false,
-      categoryEmulation: false,
-    });
-  });
   it('parses auto-connect', async () => {
     const args = parseArguments('1.0.0', ['node', 'main.js', '--auto-connect']);
     assert.deepStrictEqual(args, {

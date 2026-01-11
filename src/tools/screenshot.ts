@@ -14,7 +14,7 @@ export const screenshot = defineTool({
   name: 'take_screenshot',
   description: `Take a screenshot of the page or element.`,
   annotations: {
-    category: ToolCategory.DEBUGGING,
+    category: ToolCategory.READING,
     // Not read-only due to filePath param.
     readOnlyHint: false,
   },

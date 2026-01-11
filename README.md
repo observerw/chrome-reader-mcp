@@ -1,24 +1,19 @@
-# Chrome DevTools MCP
+# Chrome Reader MCP
 
 [![npm chrome-devtools-mcp package](https://img.shields.io/npm/v/chrome-devtools-mcp.svg)](https://npmjs.org/package/chrome-devtools-mcp)
 
-`chrome-devtools-mcp` lets your coding agent (such as Gemini, Claude, Cursor or Copilot)
-control and inspect a live Chrome browser. It acts as a Model-Context-Protocol
-(MCP) server, giving your AI coding assistant access to the full power of
-Chrome DevTools for reliable automation, in-depth debugging, and performance analysis.
+`chrome-reader-mcp` lets your coding agent (such as Gemini, Claude, Cursor or Copilot)
+read and interact with web pages using a live Chrome browser. It acts as a Model-Context-Protocol
+(MCP) server, giving your AI assistant access to page content, screenshots, and navigation for reliable web reading and information extraction.
 
-## [Tool reference](./docs/tool-reference.md) | [Changelog](./CHANGELOG.md) | [Contributing](./CONTRIBUTING.md) | [Troubleshooting](./docs/troubleshooting.md) | [Design Principles](./docs/design-principles.md)
+## [Tool reference](./docs/tool-reference.md) | [Changelog](./CHANGELOG.md) | [Contributing](./CONTRIBUTING.md) | [Troubleshooting](./docs/troubleshooting.md)
 
 ## Key features
 
-- **Get performance insights**: Uses [Chrome
-  DevTools](https://github.com/ChromeDevTools/devtools-frontend) to record
-  traces and extract actionable performance insights.
-- **Advanced browser debugging**: Analyze network requests, take screenshots and
-  check the browser console.
-- **Reliable automation**. Uses
-  [puppeteer](https://github.com/puppeteer/puppeteer) to automate actions in
-  Chrome and automatically wait for action results.
+- **Web Reading**: Take text snapshots based on the accessibility tree for clean, structured content.
+- **Visual Context**: Take screenshots of the page or specific elements.
+- **Reliable Interaction**: Automate clicks, typing, and other interactions to reach the content you need.
+- **Navigation**: Full control over page navigation, including history and tab management.
 
 ## Disclaimers
 
@@ -149,7 +144,7 @@ Start the dialog to add a new MCP server by running:
 
 Configure the following fields and press `CTRL+S` to save the configuration:
 
-- **Server name:** `chrome-devtools`
+- **Server name:** `chrome-reader`
 - **Server Type:** `[1] Local`
 - **Command:** `npx -y chrome-devtools-mcp@latest`
 
@@ -314,10 +309,10 @@ Go to `Settings | AI | Manage MCP Servers` -> `+ Add` to [add an MCP Server](htt
 Enter the following prompt in your MCP Client to check if everything is working:
 
 ```
-Check the performance of https://developers.chrome.com
+Read the content of https://www.google.com
 ```
 
-Your MCP client should open the browser and record a performance trace.
+Your MCP client should open the browser and return the page content.
 
 > [!NOTE]  
 > The MCP server will start the browser automatically once the MCP client uses a tool that requires a running browser instance. Connecting to the Chrome DevTools MCP server on its own will not automatically start the browser.
@@ -337,27 +332,16 @@ If you run into any issues, checkout our [troubleshooting guide](./docs/troubles
   - [`hover`](docs/tool-reference.md#hover)
   - [`press_key`](docs/tool-reference.md#press_key)
   - [`upload_file`](docs/tool-reference.md#upload_file)
-- **Navigation automation** (6 tools)
+- **Navigation automation** (7 tools)
   - [`close_page`](docs/tool-reference.md#close_page)
   - [`list_pages`](docs/tool-reference.md#list_pages)
   - [`navigate_page`](docs/tool-reference.md#navigate_page)
   - [`new_page`](docs/tool-reference.md#new_page)
+  - [`resize_page`](docs/tool-reference.md#resize_page)
   - [`select_page`](docs/tool-reference.md#select_page)
   - [`wait_for`](docs/tool-reference.md#wait_for)
-- **Emulation** (2 tools)
-  - [`emulate`](docs/tool-reference.md#emulate)
-  - [`resize_page`](docs/tool-reference.md#resize_page)
-- **Performance** (3 tools)
-  - [`performance_analyze_insight`](docs/tool-reference.md#performance_analyze_insight)
-  - [`performance_start_trace`](docs/tool-reference.md#performance_start_trace)
-  - [`performance_stop_trace`](docs/tool-reference.md#performance_stop_trace)
-- **Network** (2 tools)
-  - [`get_network_request`](docs/tool-reference.md#get_network_request)
-  - [`list_network_requests`](docs/tool-reference.md#list_network_requests)
-- **Debugging** (5 tools)
+- **Reading and information extraction** (3 tools)
   - [`evaluate_script`](docs/tool-reference.md#evaluate_script)
-  - [`get_console_message`](docs/tool-reference.md#get_console_message)
-  - [`list_console_messages`](docs/tool-reference.md#list_console_messages)
   - [`take_screenshot`](docs/tool-reference.md#take_screenshot)
   - [`take_snapshot`](docs/tool-reference.md#take_snapshot)
 
@@ -427,21 +411,6 @@ The Chrome DevTools MCP server supports the following configuration option:
 - **`--chromeArg`/ `--chrome-arg`**
   Additional arguments for Chrome. Only applies when Chrome is launched by chrome-devtools-mcp.
   - **Type:** array
-
-- **`--categoryEmulation`/ `--category-emulation`**
-  Set to false to exclude tools related to emulation.
-  - **Type:** boolean
-  - **Default:** `true`
-
-- **`--categoryPerformance`/ `--category-performance`**
-  Set to false to exclude tools related to performance.
-  - **Type:** boolean
-  - **Default:** `true`
-
-- **`--categoryNetwork`/ `--category-network`**
-  Set to false to exclude tools related to network.
-  - **Type:** boolean
-  - **Default:** `true`
 
 <!-- END AUTO GENERATED OPTIONS -->
 

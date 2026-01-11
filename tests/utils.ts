@@ -8,19 +8,10 @@ import type {CallToolResult} from '@modelcontextprotocol/sdk/types.js';
 import logger from 'debug';
 import type {Browser} from 'puppeteer';
 import puppeteer, {Locator} from 'puppeteer';
-import type {
-  Frame,
-  HTTPRequest,
-  HTTPResponse,
-  LaunchOptions,
-  Page,
-} from 'puppeteer-core';
-import sinon from 'sinon';
+import type {LaunchOptions, Page} from 'puppeteer-core';
 
 import {McpContext} from '../src/McpContext.js';
 import {McpResponse} from '../src/McpResponse.js';
-import {stableIdSymbol} from '../src/PageCollector.js';
-import {DevTools} from '../src/third_party/index.js';
 
 export function getTextContent(
   content: CallToolResult['content'][number],
@@ -98,75 +89,6 @@ export async function withMcpContext(
   }, options);
 }
 
-export function getMockRequest(
-  options: {
-    method?: string;
-    response?: HTTPResponse;
-    failure?: HTTPRequest['failure'];
-    resourceType?: string;
-    hasPostData?: boolean;
-    postData?: string;
-    fetchPostData?: Promise<string>;
-    stableId?: number;
-    navigationRequest?: boolean;
-    frame?: Frame;
-  } = {},
-): HTTPRequest {
-  return {
-    url() {
-      return 'http://example.com';
-    },
-    method() {
-      return options.method ?? 'GET';
-    },
-    fetchPostData() {
-      return options.fetchPostData ?? Promise.reject();
-    },
-    hasPostData() {
-      return options.hasPostData ?? false;
-    },
-    postData() {
-      return options.postData;
-    },
-    response() {
-      return options.response ?? null;
-    },
-    failure() {
-      return options.failure?.() ?? null;
-    },
-    resourceType() {
-      return options.resourceType ?? 'document';
-    },
-    headers(): Record<string, string> {
-      return {
-        'content-size': '10',
-      };
-    },
-    redirectChain(): HTTPRequest[] {
-      return [];
-    },
-    isNavigationRequest() {
-      return options.navigationRequest ?? false;
-    },
-    frame() {
-      return options.frame ?? ({} as Frame);
-    },
-    [stableIdSymbol]: options.stableId ?? 1,
-  } as unknown as HTTPRequest;
-}
-
-export function getMockResponse(
-  options: {
-    status?: number;
-  } = {},
-): HTTPResponse {
-  return {
-    status() {
-      return options.status ?? 200;
-    },
-  } as HTTPResponse;
-}
-
 export function html(
   strings: TemplateStringsArray,
   ...values: unknown[]
@@ -218,14 +140,6 @@ export function stabilizeResponseOutput(text: unknown) {
   return output;
 }
 
-export function getMockAggregatedIssue(): sinon.SinonStubbedInstance<DevTools.AggregatedIssue> {
-  const mockAggregatedIssue = sinon.createStubInstance(
-    DevTools.AggregatedIssue,
-  );
-  mockAggregatedIssue.getAllIssues.returns([]);
-  return mockAggregatedIssue;
-}
-
 export function mockListener() {
   const listeners: Record<string, Array<(data: unknown) => void>> = {};
   return {
@@ -245,34 +159,4 @@ export function mockListener() {
       }
     },
   };
-}
-
-export function getMockPage(): Page {
-  const mainFrame = {} as Frame;
-  const cdpSession = {
-    ...mockListener(),
-    send: () => {
-      // no-op
-    },
-  };
-  return {
-    mainFrame() {
-      return mainFrame;
-    },
-    ...mockListener(),
-    // @ts-expect-error internal API.
-    _client() {
-      return cdpSession;
-    },
-  } satisfies Page;
-}
-
-export function getMockBrowser(): Browser {
-  const pages = [getMockPage()];
-  return {
-    pages() {
-      return Promise.resolve(pages);
-    },
-    ...mockListener(),
-  } as Browser;
 }

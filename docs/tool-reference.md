@@ -11,27 +11,16 @@
   - [`hover`](#hover)
   - [`press_key`](#press_key)
   - [`upload_file`](#upload_file)
-- **[Navigation automation](#navigation-automation)** (6 tools)
+- **[Navigation automation](#navigation-automation)** (7 tools)
   - [`close_page`](#close_page)
   - [`list_pages`](#list_pages)
   - [`navigate_page`](#navigate_page)
   - [`new_page`](#new_page)
+  - [`resize_page`](#resize_page)
   - [`select_page`](#select_page)
   - [`wait_for`](#wait_for)
-- **[Emulation](#emulation)** (2 tools)
-  - [`emulate`](#emulate)
-  - [`resize_page`](#resize_page)
-- **[Performance](#performance)** (3 tools)
-  - [`performance_analyze_insight`](#performance_analyze_insight)
-  - [`performance_start_trace`](#performance_start_trace)
-  - [`performance_stop_trace`](#performance_stop_trace)
-- **[Network](#network)** (2 tools)
-  - [`get_network_request`](#get_network_request)
-  - [`list_network_requests`](#list_network_requests)
-- **[Debugging](#debugging)** (5 tools)
+- **[Reading and information extraction](#reading-and-information-extraction)** (3 tools)
   - [`evaluate_script`](#evaluate_script)
-  - [`get_console_message`](#get_console_message)
-  - [`list_console_messages`](#list_console_messages)
   - [`take_screenshot`](#take_screenshot)
   - [`take_snapshot`](#take_snapshot)
 
@@ -166,6 +155,17 @@
 
 ---
 
+### `resize_page`
+
+**Description:** Resizes the selected page's window so that the page has specified dimension
+
+**Parameters:**
+
+- **height** (number) **(required)**: Page height
+- **width** (number) **(required)**: Page width
+
+---
+
 ### `select_page`
 
 **Description:** Select a page as a context for future tool calls.
@@ -188,89 +188,7 @@
 
 ---
 
-## Emulation
-
-### `emulate`
-
-**Description:** Emulates various features on the selected page.
-
-**Parameters:**
-
-- **cpuThrottlingRate** (number) _(optional)_: Represents the CPU slowdown factor. Set the rate to 1 to disable throttling. If omitted, throttling remains unchanged.
-- **geolocation** (unknown) _(optional)_: Geolocation to [`emulate`](#emulate). Set to null to clear the geolocation override.
-- **networkConditions** (enum: "No emulation", "Offline", "Slow 3G", "Fast 3G", "Slow 4G", "Fast 4G") _(optional)_: Throttle network. Set to "No emulation" to disable. If omitted, conditions remain unchanged.
-
----
-
-### `resize_page`
-
-**Description:** Resizes the selected page's window so that the page has specified dimension
-
-**Parameters:**
-
-- **height** (number) **(required)**: Page height
-- **width** (number) **(required)**: Page width
-
----
-
-## Performance
-
-### `performance_analyze_insight`
-
-**Description:** Provides more detailed information on a specific Performance Insight of an insight set that was highlighted in the results of a trace recording.
-
-**Parameters:**
-
-- **insightName** (string) **(required)**: The name of the Insight you want more information on. For example: "DocumentLatency" or "LCPBreakdown"
-- **insightSetId** (string) **(required)**: The id for the specific insight set. Only use the ids given in the "Available insight sets" list.
-
----
-
-### `performance_start_trace`
-
-**Description:** Starts a performance trace recording on the selected page. This can be used to look for performance problems and insights to improve the performance of the page. It will also report Core Web Vital (CWV) scores for the page.
-
-**Parameters:**
-
-- **autoStop** (boolean) **(required)**: Determines if the trace recording should be automatically stopped.
-- **reload** (boolean) **(required)**: Determines if, once tracing has started, the page should be automatically reloaded.
-
----
-
-### `performance_stop_trace`
-
-**Description:** Stops the active performance trace recording on the selected page.
-
-**Parameters:** None
-
----
-
-## Network
-
-### `get_network_request`
-
-**Description:** Gets a network request by an optional reqid, if omitted returns the currently selected request in the DevTools Network panel.
-
-**Parameters:**
-
-- **reqid** (number) _(optional)_: The reqid of the network request. If omitted returns the currently selected request in the DevTools Network panel.
-
----
-
-### `list_network_requests`
-
-**Description:** List all requests for the currently selected page since the last navigation.
-
-**Parameters:**
-
-- **includePreservedRequests** (boolean) _(optional)_: Set to true to return the preserved requests over the last 3 navigations.
-- **pageIdx** (integer) _(optional)_: Page number to return (0-based). When omitted, returns the first page.
-- **pageSize** (integer) _(optional)_: Maximum number of requests to return. When omitted, returns all requests.
-- **resourceTypes** (array) _(optional)_: Filter requests to only return requests of the specified resource types. When omitted or empty, returns all requests.
-
----
-
-## Debugging
+## Reading and information extraction
 
 ### `evaluate_script`
 
@@ -290,29 +208,6 @@ so returned values have to JSON-serializable.
 }`
 
 - **args** (array) _(optional)_: An optional list of arguments to pass to the function.
-
----
-
-### `get_console_message`
-
-**Description:** Gets a console message by its ID. You can get all messages by calling [`list_console_messages`](#list_console_messages).
-
-**Parameters:**
-
-- **msgid** (number) **(required)**: The msgid of a console message on the page from the listed console messages
-
----
-
-### `list_console_messages`
-
-**Description:** List all console messages for the currently selected page since the last navigation.
-
-**Parameters:**
-
-- **includePreservedMessages** (boolean) _(optional)_: Set to true to return the preserved messages over the last 3 navigations.
-- **pageIdx** (integer) _(optional)_: Page number to return (0-based). When omitted, returns the first page.
-- **pageSize** (integer) _(optional)_: Maximum number of messages to return. When omitted, returns all requests.
-- **types** (array) _(optional)_: Filter messages to only return messages of the specified resource types. When omitted or empty, returns all messages.
 
 ---
 

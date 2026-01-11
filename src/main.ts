@@ -11,7 +11,6 @@ import process from 'node:process';
 import type {Channel} from './browser.js';
 import {ensureBrowserConnected, ensureBrowserLaunched} from './browser.js';
 import {parseArguments} from './cli.js';
-import {loadIssueDescriptions} from './issue-descriptions.js';
 import {logger, saveLogsToFile} from './logger.js';
 import {McpContext} from './McpContext.js';
 import {McpResponse} from './McpResponse.js';
@@ -22,7 +21,6 @@ import {
   type CallToolResult,
   SetLevelRequestSchema,
 } from './third_party/index.js';
-import {ToolCategory} from './tools/categories.js';
 import type {ToolDefinition} from './tools/ToolDefinition.js';
 import {tools} from './tools/tools.js';
 
@@ -39,11 +37,11 @@ process.on('unhandledRejection', (reason, promise) => {
   logger('Unhandled promise rejection', promise, reason);
 });
 
-logger(`Starting Chrome DevTools MCP Server v${VERSION}`);
+logger(`Starting Chrome Reader MCP Server v${VERSION}`);
 const server = new McpServer(
   {
-    name: 'chrome_devtools',
-    title: 'Chrome DevTools MCP server',
+    name: 'chrome_reader',
+    title: 'Chrome Reader MCP server',
     version: VERSION,
   },
   {capabilities: {logging: {}}},
@@ -104,24 +102,6 @@ const toolMutex = new Mutex();
 
 function registerTool(tool: ToolDefinition): void {
   if (
-    tool.annotations.category === ToolCategory.EMULATION &&
-    args.categoryEmulation === false
-  ) {
-    return;
-  }
-  if (
-    tool.annotations.category === ToolCategory.PERFORMANCE &&
-    args.categoryPerformance === false
-  ) {
-    return;
-  }
-  if (
-    tool.annotations.category === ToolCategory.NETWORK &&
-    args.categoryNetwork === false
-  ) {
-    return;
-  }
-  if (
     tool.annotations.conditions?.includes('computerVision') &&
     !args.experimentalVision
   ) {
@@ -179,7 +159,6 @@ for (const tool of tools) {
   registerTool(tool);
 }
 
-await loadIssueDescriptions();
 const transport = new StdioServerTransport();
 await server.connect(transport);
 logger('Chrome DevTools MCP Server connected');

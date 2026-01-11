@@ -15,7 +15,7 @@ export const evaluateScript = defineTool({
   description: `Evaluate a JavaScript function inside the currently selected page. Returns the response as JSON
 so returned values have to JSON-serializable.`,
   annotations: {
-    category: ToolCategory.DEBUGGING,
+    category: ToolCategory.READING,
     readOnlyHint: false,
   },
   schema: {

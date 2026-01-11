@@ -4,11 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import type {TextSnapshotNode, GeolocationOptions} from '../McpContext.js';
+import type {TextSnapshotNode} from '../McpContext.js';
 import {zod} from '../third_party/index.js';
 import type {Dialog, ElementHandle, Page} from '../third_party/index.js';
-import type {TraceResult} from '../trace-processing/parse.js';
-import type {PaginationOptions} from '../utils/types.js';
 
 import type {ToolCategory} from './categories.js';
 
@@ -56,25 +54,8 @@ export interface DevToolsData {
 export interface Response {
   appendResponseLine(value: string): void;
   setIncludePages(value: boolean): void;
-  setIncludeNetworkRequests(
-    value: boolean,
-    options?: PaginationOptions & {
-      resourceTypes?: string[];
-      includePreservedRequests?: boolean;
-      networkRequestIdInDevToolsUI?: number;
-    },
-  ): void;
-  setIncludeConsoleData(
-    value: boolean,
-    options?: PaginationOptions & {
-      types?: string[];
-      includePreservedMessages?: boolean;
-    },
-  ): void;
   includeSnapshot(params?: SnapshotParams): void;
   attachImage(value: ImageContentData): void;
-  attachNetworkRequest(reqid: number): void;
-  attachConsoleMessage(msgid: number): void;
   // Allows re-using DevTools data queried by some tools.
   attachDevToolsData(data: DevToolsData): void;
 }
@@ -83,10 +64,6 @@ export interface Response {
  * Only add methods required by tools/*.
  */
 export type Context = Readonly<{
-  isRunningPerformanceTrace(): boolean;
-  setIsRunningPerformanceTrace(x: boolean): void;
-  recordedTraces(): TraceResult[];
-  storeTraceRecording(result: TraceResult): void;
   getSelectedPage(): Page;
   getDialog(): Dialog | undefined;
   clearDialog(): void;
@@ -98,24 +75,14 @@ export type Context = Readonly<{
   selectPage(page: Page): void;
   getElementByUid(uid: string): Promise<ElementHandle<Element>>;
   getAXNodeByUid(uid: string): TextSnapshotNode | undefined;
-  setNetworkConditions(conditions: string | null): void;
-  setCpuThrottlingRate(rate: number): void;
-  setGeolocation(geolocation: GeolocationOptions | null): void;
   saveTemporaryFile(
-    data: Uint8Array<ArrayBufferLike>,
+    data: Uint8Array,
     mimeType: 'image/png' | 'image/jpeg' | 'image/webp',
   ): Promise<{filename: string}>;
-  saveFile(
-    data: Uint8Array<ArrayBufferLike>,
-    filename: string,
-  ): Promise<{filename: string}>;
+  saveFile(data: Uint8Array, filename: string): Promise<{filename: string}>;
   waitForEventsAfterAction(action: () => Promise<unknown>): Promise<void>;
   waitForTextOnPage(text: string, timeout?: number): Promise<Element>;
   getDevToolsData(): Promise<DevToolsData>;
-  /**
-   * Returns a reqid for a cdpRequestId.
-   */
-  resolveCdpRequestId(cdpRequestId: string): number | undefined;
   /**
    * Returns a reqid for a cdpRequestId.
    */

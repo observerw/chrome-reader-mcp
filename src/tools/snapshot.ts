@@ -15,7 +15,7 @@ export const takeSnapshot = defineTool({
 identifier (uid). Always use the latest snapshot. Prefer taking a snapshot over taking a screenshot. The snapshot indicates the element selected
 in the DevTools Elements panel (if any).`,
   annotations: {
-    category: ToolCategory.DEBUGGING,
+    category: ToolCategory.READING,
     // Not read-only due to filePath param.
     readOnlyHint: false,
   },

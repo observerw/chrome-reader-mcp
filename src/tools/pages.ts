@@ -201,7 +201,7 @@ export const resizePage = defineTool({
   name: 'resize_page',
   description: `Resizes the selected page's window so that the page has specified dimension`,
   annotations: {
-    category: ToolCategory.EMULATION,
+    category: ToolCategory.NAVIGATION,
     readOnlyHint: false,
   },
   schema: {

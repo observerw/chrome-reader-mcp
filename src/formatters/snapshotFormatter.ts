@@ -13,26 +13,8 @@ export function formatSnapshotNode(
 ): string {
   const chunks: string[] = [];
 
-  if (depth === 0) {
-    // Top-level content of the snapshot.
-    if (
-      snapshot?.verbose &&
-      snapshot?.hasSelectedElement &&
-      !snapshot.selectedElementUid
-    ) {
-      chunks.push(`Note: there is a selected element in the DevTools Elements panel but it is not included into the current a11y tree snapshot.
-Get a verbose snapshot to include all elements if you are interested in the selected element.\n\n`);
-    }
-  }
-
   const attributes = getAttributes(root);
-  const line =
-    ' '.repeat(depth * 2) +
-    attributes.join(' ') +
-    (root.id === snapshot?.selectedElementUid
-      ? ' [selected in the DevTools Elements panel]'
-      : '') +
-    '\n';
+  const line = ' '.repeat(depth * 2) + attributes.join(' ') + '\n';
   chunks.push(line);
 
   for (const child of root.children) {
